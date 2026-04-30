@@ -2,98 +2,106 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>SecureVault</title>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#080b14;--surface:#0e1220;--card:#141928;--border:#1e2a3a;--accent:#3b82f6;--ag:#10b981;--ar:#ef4444;--ay:#f59e0b;--ap:#8b5cf6;--text:#e2e8f0;--muted:#4a5568;--muted2:#718096;}
-*{margin:0;padding:0;box-sizing:border-box;}
-body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;min-height:100vh;}
-body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 70% 50% at 15% 15%,rgba(59,130,246,.06) 0%,transparent 60%),radial-gradient(ellipse 50% 40% at 85% 85%,rgba(139,92,246,.05) 0%,transparent 60%);pointer-events:none;}
+:root{--bg:#080b14;--surface:#0e1220;--card:#141928;--border:#1e2a3a;--accent:#3b82f6;--ag:#10b981;--ar:#ef4444;--ay:#f59e0b;--ap:#8b5cf6;--text:#e2e8f0;--muted:#4a5568;--muted2:#718096;--sb:240px;}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 70% 50% at 15% 15%,rgba(59,130,246,.06) 0%,transparent 60%),radial-gradient(ellipse 50% 40% at 85% 85%,rgba(139,92,246,.05) 0%,transparent 60%);pointer-events:none;z-index:0;}
 
-/* ── AUTH SCREENS ── */
-#authScreen{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:1000;padding:20px;}
-.auth-box{background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:40px;width:100%;max-width:420px;position:relative;}
-.auth-box::before{content:'';position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:240px;height:240px;background:radial-gradient(circle,rgba(59,130,246,.1) 0%,transparent 70%);pointer-events:none;}
-
-.auth-logo{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:28px;}
-.auth-logo-icon{width:48px;height:48px;background:linear-gradient(135deg,var(--accent),var(--ap));border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;}
-.auth-logo-text{font-size:22px;font-weight:800;letter-spacing:-.5px;}
+/* ── AUTH ── */
+#authScreen{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:1000;padding:16px;overflow-y:auto;}
+.auth-box{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:32px 28px;width:100%;max-width:400px;}
+.auth-logo{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:24px;}
+.auth-logo-icon{width:44px;height:44px;background:linear-gradient(135deg,var(--accent),var(--ap));border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;}
+.auth-logo-text{font-size:20px;font-weight:800;letter-spacing:-.5px;}
 .auth-logo-text span{color:var(--accent);}
-
-.auth-tabs{display:flex;background:var(--card);border-radius:12px;padding:4px;margin-bottom:26px;}
-.auth-tab{flex:1;padding:10px;text-align:center;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;color:var(--muted2);}
+.auth-tabs{display:flex;background:var(--card);border-radius:10px;padding:4px;margin-bottom:22px;}
+.auth-tab{flex:1;padding:9px;text-align:center;border-radius:7px;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;color:var(--muted2);}
 .auth-tab.active{background:var(--accent);color:#fff;}
-
-.form-group{margin-bottom:14px;}
-.form-label{display:block;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted2);margin-bottom:6px;}
-.form-inp{width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:12px 16px;border-radius:11px;font-family:'Outfit',sans-serif;font-size:14px;font-weight:500;outline:none;transition:border-color .2s;}
+.form-group{margin-bottom:12px;}
+.form-label{display:block;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted2);margin-bottom:5px;}
+.form-inp{width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:12px 14px;border-radius:10px;font-family:'Outfit',sans-serif;font-size:15px;font-weight:500;outline:none;transition:border-color .2s;}
 .form-inp:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(59,130,246,.1);}
 .form-inp::placeholder{color:var(--muted);}
 .pass-wrap{position:relative;}
 .pass-wrap .form-inp{padding-right:44px;}
-.pass-eye{position:absolute;right:13px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--muted2);cursor:pointer;font-size:16px;}
-
-.btn-auth{width:100%;background:var(--accent);color:#fff;border:none;padding:14px;border-radius:12px;font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;margin-top:6px;}
-.btn-auth:hover{background:#2563eb;transform:translateY(-1px);box-shadow:0 6px 20px rgba(59,130,246,.3);}
-.auth-err{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:var(--ar);padding:10px 14px;border-radius:10px;font-size:12px;margin-top:10px;display:none;}
+.pass-eye{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--muted2);cursor:pointer;font-size:18px;padding:4px;}
+.btn-auth{width:100%;background:var(--accent);color:#fff;border:none;padding:14px;border-radius:11px;font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;margin-top:6px;}
+.btn-auth:active{transform:scale(.98);}
+.auth-err{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:var(--ar);padding:10px 14px;border-radius:9px;font-size:12px;margin-top:10px;display:none;}
 .auth-err.show{display:block;}
 .auth-note{font-size:11px;color:var(--muted2);text-align:center;margin-top:14px;}
 
-/* ── APP ── */
-#app{display:none;}
+/* ── APP LAYOUT ── */
+#app{display:none;min-height:100vh;}
 .layout{display:flex;min-height:100vh;}
 
-.sidebar{width:235px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:18px 14px;flex-shrink:0;position:fixed;top:0;left:0;bottom:0;z-index:50;}
-.sb-logo{display:flex;align-items:center;gap:10px;padding:8px 10px;margin-bottom:22px;}
-.sb-logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--accent),var(--ap));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;}
+/* SIDEBAR */
+.sidebar{width:var(--sb);background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:16px 12px;flex-shrink:0;position:fixed;top:0;left:0;bottom:0;z-index:100;transition:transform .3s ease;}
+.sb-logo{display:flex;align-items:center;gap:10px;padding:6px 8px;margin-bottom:20px;}
+.sb-logo-icon{width:34px;height:34px;background:linear-gradient(135deg,var(--accent),var(--ap));border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;}
 .sb-logo-text{font-size:15px;font-weight:800;letter-spacing:-.3px;}
 .sb-logo-text span{color:var(--accent);}
-.sb-sec{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin:14px 10px 7px;}
-.sb-btn{display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:10px;border:none;background:transparent;color:var(--muted2);cursor:pointer;width:100%;text-align:left;font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;transition:all .2s;}
+.sb-sec{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin:12px 8px 6px;}
+.sb-btn{display:flex;align-items:center;gap:9px;padding:10px 10px;border-radius:9px;border:none;background:transparent;color:var(--muted2);cursor:pointer;width:100%;text-align:left;font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;transition:all .2s;}
 .sb-btn:hover{background:rgba(255,255,255,.04);color:var(--text);}
 .sb-btn.active{background:rgba(59,130,246,.12);color:var(--accent);}
-.sb-btn .si{font-size:15px;width:18px;text-align:center;}
+.sb-btn .si{font-size:16px;width:20px;text-align:center;flex-shrink:0;}
 .sb-cnt{margin-left:auto;background:var(--card);border:1px solid var(--border);color:var(--muted2);font-size:10px;font-weight:700;padding:1px 7px;border-radius:100px;font-family:'JetBrains Mono',monospace;}
 .sb-cnt.g{background:rgba(16,185,129,.1);border-color:rgba(16,185,129,.25);color:var(--ag);}
 .sb-bottom{margin-top:auto;}
-.sb-user{display:flex;align-items:center;gap:9px;padding:11px;background:var(--card);border:1px solid var(--border);border-radius:12px;}
-.sb-av{width:32px;height:32px;background:linear-gradient(135deg,var(--accent),var(--ap));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
-.sb-un{font-size:12px;font-weight:700;}
+.sb-user{display:flex;align-items:center;gap:9px;padding:10px;background:var(--card);border:1px solid var(--border);border-radius:11px;}
+.sb-av{width:30px;height:30px;background:linear-gradient(135deg,var(--accent),var(--ap));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.sb-un{font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .sb-ur{font-size:10px;color:var(--muted2);}
-.sb-out{margin-left:auto;background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:15px;padding:2px;transition:color .2s;}
+.sb-out{margin-left:auto;background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:16px;padding:4px;flex-shrink:0;}
 .sb-out:hover{color:var(--ar);}
 
-.main{margin-left:235px;flex:1;padding:26px 30px;max-width:1180px;}
-.ph{display:flex;align-items:center;gap:14px;margin-bottom:24px;}
-.ph-title{font-size:21px;font-weight:800;letter-spacing:-.4px;}
-.ph-sub{font-size:12px;color:var(--muted2);margin-top:2px;}
-.ph-acts{margin-left:auto;display:flex;gap:9px;}
+/* MOBILE TOP BAR */
+.topbar{display:none;position:fixed;top:0;left:0;right:0;height:56px;background:var(--surface);border-bottom:1px solid var(--border);z-index:99;align-items:center;padding:0 16px;gap:12px;}
+.topbar-logo{font-size:16px;font-weight:800;flex:1;}
+.topbar-logo span{color:var(--accent);}
+.menu-btn{background:transparent;border:none;color:var(--text);font-size:22px;cursor:pointer;padding:6px;}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:99;}
+.overlay.show{display:block;}
 
-.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-bottom:24px;}
-.stat{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:17px 19px;position:relative;overflow:hidden;}
-.stat::after{content:attr(data-icon);position:absolute;bottom:-6px;right:10px;font-size:44px;opacity:.06;line-height:1;}
-.stat-label{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted2);margin-bottom:7px;}
-.stat-val{font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:700;margin-bottom:2px;}
-.stat-sub{font-size:11px;color:var(--muted2);}
+/* MAIN */
+.main{margin-left:var(--sb);flex:1;padding:24px 24px;max-width:1200px;}
+.ph{display:flex;align-items:flex-start;gap:12px;margin-bottom:22px;flex-wrap:wrap;}
+.ph-title{font-size:20px;font-weight:800;letter-spacing:-.4px;}
+.ph-sub{font-size:12px;color:var(--muted2);margin-top:2px;}
+.ph-acts{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap;}
+
+/* STATS */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px;}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:15px 16px;position:relative;overflow:hidden;}
+.stat::after{content:attr(data-icon);position:absolute;bottom:-6px;right:8px;font-size:40px;opacity:.06;line-height:1;}
+.stat-label{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted2);margin-bottom:6px;}
+.stat-val{font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:700;margin-bottom:2px;}
+.stat-sub{font-size:10px;color:var(--muted2);}
 .b{color:var(--accent)}.g{color:var(--ag)}.y{color:var(--ay)}.r{color:var(--ar)}
 
-.sw{position:relative;margin-bottom:18px;}
-.si2{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:11px 16px 11px 40px;border-radius:11px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:500;outline:none;transition:border-color .2s;}
+/* SEARCH */
+.sw{position:relative;margin-bottom:16px;}
+.si2{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:11px 14px 11px 40px;border-radius:10px;font-family:'Outfit',sans-serif;font-size:14px;font-weight:500;outline:none;transition:border-color .2s;}
 .si2:focus{border-color:var(--accent);}
-.sic{position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:15px;color:var(--muted);}
+.sic{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:16px;color:var(--muted);}
 
+/* ACCOUNT CARDS */
 .ag{display:flex;flex-direction:column;gap:9px;}
-.ac{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:15px 18px;display:flex;align-items:center;gap:13px;transition:border-color .2s,transform .15s;cursor:pointer;animation:fu .25s ease;}
+.ac{background:var(--surface);border:1px solid var(--border);border-radius:13px;padding:14px 16px;display:flex;align-items:center;gap:12px;transition:border-color .2s;cursor:pointer;animation:fu .25s ease;}
 @keyframes fu{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-.ac:hover{border-color:rgba(59,130,246,.35);transform:translateY(-1px);}
-.ac-av{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.ac:hover{border-color:rgba(59,130,246,.35);}
+.ac-av{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;}
 .ac-av.gmail{background:rgba(239,68,68,.12);}.ac-av.facebook{background:rgba(59,130,246,.12);}.ac-av.instagram{background:rgba(139,92,246,.12);}.ac-av.other{background:rgba(107,114,128,.12);}
 .ac-info{flex:1;min-width:0;}
-.ac-lbl{font-size:13px;font-weight:700;margin-bottom:2px;}
+.ac-lbl{font-size:13px;font-weight:700;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .ac-em{font-size:11px;color:var(--muted2);font-family:'JetBrains Mono',monospace;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.ac-bgs{display:flex;gap:5px;flex-wrap:wrap;}
-.bdg{padding:2px 8px;border-radius:100px;font-size:9px;font-weight:700;}
+.ac-bgs{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px;}
+.bdg{padding:2px 7px;border-radius:100px;font-size:9px;font-weight:700;}
 .bdg.act{background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.25);color:var(--ag);}
 .bdg.inact{background:rgba(107,114,128,.1);border:1px solid var(--border);color:var(--muted2);}
 .bdg.tfa{background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.25);color:var(--accent);}
@@ -105,75 +113,135 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .ibt.del:hover{border-color:var(--ar);color:var(--ar);}
 
 /* MODAL */
-.mbg{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(4px);z-index:200;display:none;align-items:center;justify-content:center;padding:20px;}
+.mbg{position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(4px);z-index:200;display:none;align-items:flex-end;justify-content:center;padding:0;}
 .mbg.show{display:flex;}
-.modal{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:26px;width:100%;max-width:500px;max-height:88vh;overflow-y:auto;position:relative;}
-.mc{position:absolute;top:16px;right:16px;background:transparent;border:none;color:var(--muted2);font-size:19px;cursor:pointer;}
-.mc:hover{color:var(--text);}
-.mt{font-size:17px;font-weight:800;margin-bottom:3px;}
-.ms{font-size:12px;color:var(--muted2);margin-bottom:20px;}
-.fr{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:11px;}
-.fg{margin-bottom:11px;}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:20px 20px 0 0;padding:24px 20px;width:100%;max-width:600px;max-height:92vh;overflow-y:auto;position:relative;}
+.mc{position:absolute;top:14px;right:14px;background:var(--card);border:none;color:var(--muted2);font-size:16px;cursor:pointer;width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;}
+.modal-handle{width:40px;height:4px;background:var(--border);border-radius:100px;margin:0 auto 18px;}
+.mt{font-size:16px;font-weight:800;margin-bottom:3px;}
+.ms{font-size:12px;color:var(--muted2);margin-bottom:18px;}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
+.fg{margin-bottom:10px;}
 .fl{display:block;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted2);margin-bottom:5px;}
-.fi{width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:10px 13px;border-radius:10px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:500;outline:none;transition:border-color .2s;}
+.fi{width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:11px 12px;border-radius:9px;font-family:'Outfit',sans-serif;font-size:14px;font-weight:500;outline:none;transition:border-color .2s;}
 .fi:focus{border-color:var(--accent);}
 .fi::placeholder{color:var(--muted);}
-textarea.fi{resize:vertical;min-height:65px;font-family:'JetBrains Mono',monospace;font-size:11px;}
-.pw{position:relative;}.pw .fi{padding-right:40px;}
-.pe{position:absolute;right:11px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--muted2);cursor:pointer;font-size:15px;}
-.pg{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:11px;}
-.po{background:var(--card);border:2px solid var(--border);border-radius:9px;padding:9px 5px;text-align:center;cursor:pointer;transition:all .2s;font-size:11px;font-weight:700;}
-.po:hover,.po.sel{border-color:var(--accent);background:rgba(59,130,246,.08);color:var(--accent);}
+textarea.fi{resize:vertical;min-height:60px;font-family:'JetBrains Mono',monospace;font-size:12px;}
+.pw{position:relative;}.pw .fi{padding-right:42px;}
+.pe{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--muted2);cursor:pointer;font-size:17px;padding:4px;}
+.pg{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:10px;}
+.po{background:var(--card);border:2px solid var(--border);border-radius:9px;padding:9px 4px;text-align:center;cursor:pointer;transition:all .2s;font-size:11px;font-weight:700;}
+.po.sel{border-color:var(--accent);background:rgba(59,130,246,.08);color:var(--accent);}
 .po .pi{font-size:18px;display:block;margin-bottom:3px;}
 .st-tog{display:flex;gap:7px;}
-.st-o{flex:1;padding:8px;border-radius:9px;border:1px solid var(--border);background:var(--card);color:var(--muted2);font-size:11px;font-weight:700;cursor:pointer;text-align:center;transition:all .2s;}
+.st-o{flex:1;padding:9px;border-radius:9px;border:1px solid var(--border);background:var(--card);color:var(--muted2);font-size:12px;font-weight:700;cursor:pointer;text-align:center;transition:all .2s;}
 .st-o.act.g{border-color:rgba(16,185,129,.4);background:rgba(16,185,129,.1);color:var(--ag);}
 .st-o.act.r{border-color:rgba(239,68,68,.4);background:rgba(239,68,68,.1);color:var(--ar);}
 .bl{display:flex;flex-direction:column;gap:5px;margin-top:5px;}
-.bi{display:flex;align-items:center;gap:7px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:7px 11px;}
+.bi{display:flex;align-items:center;gap:7px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:7px 10px;}
 .bc{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;flex:1;color:var(--ay);}
-.bd{background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:13px;transition:color .2s;}
-.bd:hover{color:var(--ar);}
+.bd{background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:14px;}
 .abr{display:flex;gap:7px;margin-top:7px;}
-.mf{display:flex;gap:9px;margin-top:18px;}
-.btn-save{flex:1;background:var(--accent);color:#fff;border:none;padding:12px;border-radius:10px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;}
-.btn-save:hover{background:#2563eb;}
-.btn-cancel{background:var(--card);border:1px solid var(--border);color:var(--muted2);padding:12px 18px;border-radius:10px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;cursor:pointer;}
-.btn-cancel:hover{color:var(--text);}
+.mf{display:flex;gap:9px;margin-top:16px;}
+.btn-save{flex:1;background:var(--accent);color:#fff;border:none;padding:13px;border-radius:10px;font-family:'Outfit',sans-serif;font-size:14px;font-weight:700;cursor:pointer;}
+.btn-cancel{background:var(--card);border:1px solid var(--border);color:var(--muted2);padding:13px 16px;border-radius:10px;font-family:'Outfit',sans-serif;font-size:14px;font-weight:600;cursor:pointer;}
 
 /* DETAIL */
-.dr{display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid var(--border);}
+.dr{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--border);}
 .dr:last-child{border-bottom:none;}
-.di{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+.di{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
 .dl2{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted2);margin-bottom:2px;}
-.dv{font-size:13px;font-weight:600;font-family:'JetBrains Mono',monospace;}
-.da{margin-left:auto;display:flex;gap:5px;}
+.dv{font-size:13px;font-weight:600;font-family:'JetBrains Mono',monospace;word-break:break-all;}
+.da{margin-left:auto;display:flex;gap:5px;flex-shrink:0;}
 
 /* SETTINGS */
-.sc{background:var(--surface);border:1px solid var(--border);border-radius:15px;padding:20px;margin-bottom:14px;}
-.st2{font-size:12px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:7px;}
+.sc{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:14px;}
+.st2{font-size:12px;font-weight:700;margin-bottom:14px;}
 
 /* EMPTY */
-.empty{text-align:center;padding:55px 20px;color:var(--muted2);}
-.eic{font-size:48px;opacity:.2;margin-bottom:12px;}
-.etit{font-size:17px;font-weight:700;margin-bottom:5px;opacity:.35;}
+.empty{text-align:center;padding:50px 20px;color:var(--muted2);}
+.eic{font-size:44px;opacity:.2;margin-bottom:12px;}
+.etit{font-size:16px;font-weight:700;margin-bottom:4px;opacity:.35;}
 .esub{font-size:12px;opacity:.35;}
 
-.btn-p{background:var(--accent);color:#fff;border:none;padding:9px 16px;border-radius:10px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:6px;}
-.btn-p:hover{background:#2563eb;transform:translateY(-1px);}
+.btn-p{background:var(--accent);color:#fff;border:none;padding:10px 16px;border-radius:10px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;}
 
-.toast{position:fixed;bottom:18px;right:18px;padding:10px 16px;border-radius:10px;font-weight:700;font-size:12px;z-index:9999;animation:ti .3s ease;display:flex;align-items:center;gap:7px;}
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);padding:11px 20px;border-radius:10px;font-weight:700;font-size:13px;z-index:9999;animation:ti .3s ease;white-space:nowrap;}
 .toast.success{background:var(--ag);color:#fff;}
 .toast.error{background:var(--ar);color:#fff;}
 .toast.info{background:var(--accent);color:#fff;}
-@keyframes ti{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes ti{from{opacity:0;transform:translateX(-50%) translateY(8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
 
-::-webkit-scrollbar{width:5px;}
+/* BOTTOM NAV - Mobile */
+.bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);z-index:98;padding:8px 0 env(safe-area-inset-bottom,8px);}
+.bnav-row{display:flex;align-items:center;justify-content:space-around;}
+.bnav-btn{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 12px;border:none;background:transparent;color:var(--muted2);cursor:pointer;font-family:'Outfit',sans-serif;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;transition:color .2s;position:relative;}
+.bnav-btn.active{color:var(--accent);}
+.bnav-btn .bni{font-size:20px;}
+.bnav-badge{position:absolute;top:4px;right:8px;background:var(--accent);color:#000;font-size:8px;font-weight:700;padding:1px 4px;border-radius:100px;font-family:'JetBrains Mono',monospace;}
+
+::-webkit-scrollbar{width:4px;}
 ::-webkit-scrollbar-track{background:transparent;}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  :root{--sb:240px;}
+  
+  .sidebar{transform:translateX(-100%);}
+  .sidebar.open{transform:translateX(0);}
+  
+  .topbar{display:flex;}
+  .bottom-nav{display:block;}
+  
+  .main{margin-left:0;padding:72px 14px 80px;}
+  
+  .stats-row{grid-template-columns:repeat(2,1fr);gap:10px;}
+  
+  .ph{margin-bottom:16px;}
+  .ph-title{font-size:18px;}
+  .ph-acts{width:100%;}
+  .ph-acts .btn-p{width:100%;justify-content:center;}
+  
+  .fr{grid-template-columns:1fr;}
+  
+  .mbg{align-items:flex-end;}
+  .modal{border-radius:20px 20px 0 0;max-height:90vh;}
+  
+  .ac{padding:12px 14px;}
+  .ac-acts{flex-direction:column;gap:4px;}
+  
+  .pg{grid-template-columns:repeat(2,1fr);}
+  
+  .mf{flex-direction:column-reverse;}
+  .btn-cancel{text-align:center;}
+}
+
+@media (max-width: 400px) {
+  .stats-row{grid-template-columns:repeat(2,1fr);}
+  .stat-val{font-size:20px;}
+  .auth-box{padding:24px 18px;}
+}
+
+@media (min-width: 769px) {
+  .topbar{display:none;}
+  .bottom-nav{display:none;}
+  .sidebar{transform:translateX(0) !important;}
+  .overlay{display:none !important;}
+}
 </style>
 </head>
 <body>
+
+<!-- MOBILE TOP BAR -->
+<div class="topbar" id="topbar">
+  <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+  <div class="topbar-logo">Secure<span>Vault</span></div>
+  <button class="btn-p" onclick="openAdd()" style="padding:8px 12px;font-size:12px;">➕</button>
+</div>
+
+<!-- OVERLAY -->
+<div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
 
 <!-- AUTH SCREEN -->
 <div id="authScreen">
@@ -182,64 +250,59 @@ textarea.fi{resize:vertical;min-height:65px;font-family:'JetBrains Mono',monospa
       <div class="auth-logo-icon">🔐</div>
       <div class="auth-logo-text">Secure<span>Vault</span></div>
     </div>
-
     <div class="auth-tabs">
       <div class="auth-tab active" id="tab-login" onclick="switchTab('login')">🔓 Login</div>
       <div class="auth-tab" id="tab-signup" onclick="switchTab('signup')">✨ Sign Up</div>
     </div>
-
-    <!-- LOGIN FORM -->
     <div id="loginForm">
       <div class="form-group">
         <label class="form-label">👤 Username</label>
-        <input class="form-inp" type="text" id="loginUser" placeholder="apna username" onkeydown="if(event.key==='Enter')doLogin()">
+        <input class="form-inp" type="text" id="loginUser" placeholder="username" autocomplete="username" onkeydown="if(event.key==='Enter')doLogin()">
       </div>
       <div class="form-group">
         <label class="form-label">🔑 Password</label>
         <div class="pass-wrap">
-          <input class="form-inp" type="password" id="loginPass" placeholder="password" onkeydown="if(event.key==='Enter')doLogin()">
+          <input class="form-inp" type="password" id="loginPass" placeholder="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
           <button class="pass-eye" onclick="toggleVis('loginPass',this)">👁️</button>
         </div>
       </div>
       <button class="btn-auth" onclick="doLogin()">🔓 Login Karo</button>
     </div>
-
-    <!-- SIGNUP FORM -->
     <div id="signupForm" style="display:none;">
       <div class="form-group">
         <label class="form-label">😊 Apna Naam</label>
-        <input class="form-inp" type="text" id="signupName" placeholder="Jaise: Ali Hassan">
+        <input class="form-inp" type="text" id="signupName" placeholder="Ali Hassan" autocomplete="name">
       </div>
       <div class="form-group">
-        <label class="form-label">👤 Username (unique)</label>
-        <input class="form-inp" type="text" id="signupUser" placeholder="lowercase, no spaces">
+        <label class="form-label">👤 Username</label>
+        <input class="form-inp" type="text" id="signupUser" placeholder="lowercase, no spaces" autocomplete="username">
       </div>
       <div class="form-group">
-        <label class="form-label">🔑 Password (min 6 chars)</label>
+        <label class="form-label">🔑 Password (min 6)</label>
         <div class="pass-wrap">
-          <input class="form-inp" type="password" id="signupPass" placeholder="strong password">
+          <input class="form-inp" type="password" id="signupPass" placeholder="strong password" autocomplete="new-password">
           <button class="pass-eye" onclick="toggleVis('signupPass',this)">👁️</button>
         </div>
       </div>
       <div class="form-group">
         <label class="form-label">🔑 Confirm Password</label>
         <div class="pass-wrap">
-          <input class="form-inp" type="password" id="signupConf" placeholder="dobara likho" onkeydown="if(event.key==='Enter')doSignup()">
+          <input class="form-inp" type="password" id="signupConf" placeholder="dobara likho" autocomplete="new-password" onkeydown="if(event.key==='Enter')doSignup()">
           <button class="pass-eye" onclick="toggleVis('signupConf',this)">👁️</button>
         </div>
       </div>
       <button class="btn-auth" onclick="doSignup()">✨ Account Banao</button>
     </div>
-
     <div class="auth-err" id="authErr"></div>
-    <div class="auth-note">🔒 Aapka data AES-256 se encrypted rahega</div>
+    <div class="auth-note">🔒 AES-256 encrypted — sirf aap dekh sakte ho</div>
   </div>
 </div>
 
 <!-- APP -->
 <div id="app">
   <div class="layout">
-    <div class="sidebar">
+    <!-- SIDEBAR -->
+    <div class="sidebar" id="sidebar">
       <div class="sb-logo">
         <div class="sb-logo-icon">🔐</div>
         <div class="sb-logo-text">Secure<span>Vault</span></div>
@@ -255,38 +318,45 @@ textarea.fi{resize:vertical;min-height:65px;font-family:'JetBrains Mono',monospa
       <div class="sb-bottom">
         <div class="sb-user">
           <div class="sb-av">👤</div>
-          <div><div class="sb-un" id="sbName">User</div><div class="sb-ur" id="sbUser">@user</div></div>
+          <div style="min-width:0;flex:1;">
+            <div class="sb-un" id="sbName">User</div>
+            <div class="sb-ur" id="sbUser">@user</div>
+          </div>
           <button class="sb-out" onclick="doLogout()" title="Logout">🚪</button>
         </div>
       </div>
     </div>
 
+    <!-- MAIN CONTENT -->
     <div class="main">
-      <!-- ALL -->
+      <!-- ALL ACCOUNTS -->
       <div id="page-all">
         <div class="ph">
-          <div><div class="ph-title">🏠 All Accounts</div><div class="ph-sub" id="subAll">Loading...</div></div>
-          <div class="ph-acts"><button class="btn-p" onclick="openAdd()">➕ Add Account</button></div>
+          <div style="flex:1;">
+            <div class="ph-title">🏠 All Accounts</div>
+            <div class="ph-sub" id="subAll">Loading...</div>
+          </div>
+          <div class="ph-acts" id="desktopAdd">
+            <button class="btn-p" onclick="openAdd()">➕ Add Account</button>
+          </div>
         </div>
         <div class="stats-row">
           <div class="stat" data-icon="🔑"><div class="stat-label">Total</div><div class="stat-val b" id="sT">0</div><div class="stat-sub">accounts</div></div>
           <div class="stat" data-icon="✅"><div class="stat-label">Active</div><div class="stat-val g" id="sAc">0</div><div class="stat-sub">accounts</div></div>
           <div class="stat" data-icon="🛡️"><div class="stat-label">2FA</div><div class="stat-val y" id="s2F">0</div><div class="stat-sub">secured</div></div>
-          <div class="stat" data-icon="🗝️"><div class="stat-label">Backup Codes</div><div class="stat-val r" id="sBK">0</div><div class="stat-sub">saved</div></div>
+          <div class="stat" data-icon="🗝️"><div class="stat-label">Backup</div><div class="stat-val r" id="sBK">0</div><div class="stat-sub">codes saved</div></div>
         </div>
         <div class="sw"><span class="sic">🔍</span><input class="si2" type="text" id="sInp" placeholder="Search..." oninput="renderAccounts()"></div>
         <div class="ag" id="aGrid"></div>
       </div>
 
-      <!-- PLATFORM PAGES -->
-      <div id="page-gmail" style="display:none;"><div class="ph"><div><div class="ph-title">📧 Gmail</div></div><div class="ph-acts"><button class="btn-p" onclick="openAdd('Gmail')">➕ Add Gmail</button></div></div><div class="ag" id="gmailGrid"></div></div>
+      <div id="page-gmail" style="display:none;"><div class="ph"><div><div class="ph-title">📧 Gmail</div></div><div class="ph-acts"><button class="btn-p" onclick="openAdd('Gmail')">➕ Add</button></div></div><div class="ag" id="gmailGrid"></div></div>
       <div id="page-facebook" style="display:none;"><div class="ph"><div><div class="ph-title">📘 Facebook</div></div><div class="ph-acts"><button class="btn-p" onclick="openAdd('Facebook')">➕ Add</button></div></div><div class="ag" id="facebookGrid"></div></div>
       <div id="page-instagram" style="display:none;"><div class="ph"><div><div class="ph-title">📸 Instagram</div></div><div class="ph-acts"><button class="btn-p" onclick="openAdd('Instagram')">➕ Add</button></div></div><div class="ag" id="instagramGrid"></div></div>
       <div id="page-other" style="display:none;"><div class="ph"><div><div class="ph-title">🌐 Other</div></div><div class="ph-acts"><button class="btn-p" onclick="openAdd()">➕ Add</button></div></div><div class="ag" id="otherGrid"></div></div>
 
-      <!-- SETTINGS -->
       <div id="page-settings" style="display:none;">
-        <div class="ph"><div><div class="ph-title">⚙️ Settings</div><div class="ph-sub">Account aur security settings</div></div></div>
+        <div class="ph"><div><div class="ph-title">⚙️ Settings</div></div></div>
         <div class="sc">
           <div class="st2">🔑 Password Change Karo</div>
           <div class="fr">
@@ -298,13 +368,24 @@ textarea.fi{resize:vertical;min-height:65px;font-family:'JetBrains Mono',monospa
         <div class="sc">
           <div class="st2">ℹ️ Security Info</div>
           <div style="font-size:13px;color:var(--muted2);line-height:1.9;">
-            <div>🔒 Encryption: <span style="color:var(--ag);font-family:'JetBrains Mono',monospace;">AES-256 Fernet</span></div>
-            <div>🔑 Key Derivation: <span style="color:var(--ag);font-family:'JetBrains Mono',monospace;">PBKDF2 — 480,000 iterations</span></div>
+            <div>🔒 <span style="color:var(--ag);">AES-256 Fernet Encryption</span></div>
+            <div>🔑 <span style="color:var(--ag);">PBKDF2 — 480,000 iterations</span></div>
             <div>👤 Har user ka alag encrypted vault</div>
-            <div>🛡️ Password server pe store nahi hota — sirf hash</div>
+            <div>🛡️ Password hash store hota hai — plain text nahi</div>
           </div>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- BOTTOM NAV (Mobile) -->
+  <div class="bottom-nav">
+    <div class="bnav-row">
+      <button class="bnav-btn active" id="bnav-all" onclick="navTo('all')"><span class="bni">🏠</span>All</button>
+      <button class="bnav-btn" id="bnav-gmail" onclick="navTo('gmail')"><span class="bni">📧</span>Gmail</button>
+      <button class="bnav-btn" id="bnav-instagram" onclick="navTo('instagram')"><span class="bni">📸</span>Insta</button>
+      <button class="bnav-btn" id="bnav-other" onclick="navTo('other')"><span class="bni">🌐</span>Other</button>
+      <button class="bnav-btn" id="bnav-settings" onclick="navTo('settings')"><span class="bni">⚙️</span>Settings</button>
     </div>
   </div>
 </div>
@@ -312,10 +393,11 @@ textarea.fi{resize:vertical;min-height:65px;font-family:'JetBrains Mono',monospa
 <!-- ADD/EDIT MODAL -->
 <div class="mbg" id="addModal">
   <div class="modal">
+    <div class="modal-handle"></div>
     <button class="mc" onclick="closeM('addModal')">✕</button>
     <div class="mt" id="mTitle">➕ Naya Account</div>
     <div class="ms">Saari details encrypted save hongi</div>
-    <div class="fg"><label class="fl">🏷️ Label</label><input class="fi" type="text" id="fLbl" placeholder="e.g. Main Gmail, Business FB"></div>
+    <div class="fg"><label class="fl">🏷️ Label</label><input class="fi" type="text" id="fLbl" placeholder="Main Gmail, Business FB..."></div>
     <div class="fg">
       <label class="fl">📱 Platform</label>
       <div class="pg">
@@ -326,15 +408,15 @@ textarea.fi{resize:vertical;min-height:65px;font-family:'JetBrains Mono',monospa
       </div>
     </div>
     <div class="fr">
-      <div class="fg"><label class="fl">📧 Email</label><input class="fi" type="email" id="fEm" placeholder="email@gmail.com"></div>
-      <div class="fg"><label class="fl">📞 Phone</label><input class="fi" type="text" id="fPh" placeholder="+92xxxxxxxxxx"></div>
+      <div class="fg"><label class="fl">📧 Email</label><input class="fi" type="email" id="fEm" placeholder="email@gmail.com" autocomplete="off"></div>
+      <div class="fg"><label class="fl">📞 Phone</label><input class="fi" type="tel" id="fPh" placeholder="+92xxxxxxxxxx"></div>
     </div>
-    <div class="fg"><label class="fl">🔑 Password</label><div class="pw"><input class="fi" type="password" id="fPs" placeholder="Account password"><button class="pe" onclick="toggleVis('fPs',this)">👁️</button></div></div>
-    <div class="fg"><label class="fl">🛡️ 2FA Secret (optional)</label><input class="fi" type="text" id="f2f" placeholder="Authenticator secret"></div>
+    <div class="fg"><label class="fl">🔑 Password</label><div class="pw"><input class="fi" type="password" id="fPs" placeholder="Account password" autocomplete="new-password"><button class="pe" onclick="toggleVis('fPs',this)">👁️</button></div></div>
+    <div class="fg"><label class="fl">🛡️ 2FA Secret</label><input class="fi" type="text" id="f2f" placeholder="Authenticator secret (optional)"></div>
     <div class="fg">
       <label class="fl">🗝️ Backup Codes</label>
       <div class="bl" id="bkList"></div>
-      <div class="abr"><input class="fi" type="text" id="nBk" placeholder="Backup code..." style="flex:1;"><button class="btn-p" onclick="addBk()" style="padding:10px 12px;">➕</button></div>
+      <div class="abr"><input class="fi" type="text" id="nBk" placeholder="Backup code..." style="flex:1;"><button class="btn-p" onclick="addBk()" style="padding:11px 14px;flex-shrink:0;">➕</button></div>
     </div>
     <div class="fg"><label class="fl">📝 Notes</label><textarea class="fi" id="fNt" placeholder="Notes..."></textarea></div>
     <div class="fg">
@@ -348,6 +430,7 @@ textarea.fi{resize:vertical;min-height:65px;font-family:'JetBrains Mono',monospa
 <!-- DETAIL MODAL -->
 <div class="mbg" id="dtModal">
   <div class="modal">
+    <div class="modal-handle"></div>
     <button class="mc" onclick="closeM('dtModal')">✕</button>
     <div class="mt" id="dtT">Details</div>
     <div class="ms" id="dtS"></div>
@@ -359,52 +442,52 @@ textarea.fi{resize:vertical;min-height:65px;font-family:'JetBrains Mono',monospa
 <script>
 let allAcc=[], editId=null, selPlatform='Gmail', selStatus='active', bkCodes=[], curPage='all';
 
-// ── AUTH ──────────────────────────────────────────────────────────────────────
-window.addEventListener('load', async () => {
-  const r = await fetch('/check_auth').then(x=>x.json());
-  if (r.auth) enterApp(r.name, r.user);
+window.addEventListener('load', async()=>{
+  const r=await fetch('/check_auth').then(x=>x.json());
+  if(r.auth) enterApp(r.name,r.user);
 });
 
-function switchTab(t) {
-  document.getElementById('loginForm').style.display  = t==='login'  ? 'block' : 'none';
-  document.getElementById('signupForm').style.display = t==='signup' ? 'block' : 'none';
-  document.getElementById('tab-login').classList.toggle('active',  t==='login');
-  document.getElementById('tab-signup').classList.toggle('active', t==='signup');
+function toggleSidebar(){
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('show');
+}
+
+function switchTab(t){
+  document.getElementById('loginForm').style.display=t==='login'?'block':'none';
+  document.getElementById('signupForm').style.display=t==='signup'?'block':'none';
+  document.getElementById('tab-login').classList.toggle('active',t==='login');
+  document.getElementById('tab-signup').classList.toggle('active',t==='signup');
   document.getElementById('authErr').classList.remove('show');
 }
 
-async function doLogin() {
-  const u = document.getElementById('loginUser').value.trim();
-  const p = document.getElementById('loginPass').value;
-  if (!u||!p) return showAuthErr('Sab fields bharo!');
-  const r = await post('/login',{username:u,password:p});
-  if (r.ok) enterApp(r.name, u);
-  else showAuthErr(r.msg);
+async function doLogin(){
+  const u=document.getElementById('loginUser').value.trim();
+  const p=document.getElementById('loginPass').value;
+  if(!u||!p) return showAuthErr('Sab fields bharo!');
+  const r=await post('/login',{username:u,password:p});
+  if(r.ok) enterApp(r.name,u); else showAuthErr(r.msg);
 }
 
-async function doSignup() {
-  const name = document.getElementById('signupName').value.trim();
-  const u    = document.getElementById('signupUser').value.trim().toLowerCase();
-  const p    = document.getElementById('signupPass').value;
-  const c    = document.getElementById('signupConf').value;
-  if (!name||!u||!p||!c) return showAuthErr('Sab fields bharo!');
-  if (p!==c) return showAuthErr('Passwords match nahi karte!');
-  const r = await post('/signup',{name,username:u,password:p});
-  if (r.ok) enterApp(r.name, u);
-  else showAuthErr(r.msg);
+async function doSignup(){
+  const name=document.getElementById('signupName').value.trim();
+  const u=document.getElementById('signupUser').value.trim().toLowerCase();
+  const p=document.getElementById('signupPass').value;
+  const c=document.getElementById('signupConf').value;
+  if(!name||!u||!p||!c) return showAuthErr('Sab fields bharo!');
+  if(p!==c) return showAuthErr('Passwords match nahi karte!');
+  const r=await post('/signup',{name,username:u,password:p});
+  if(r.ok) enterApp(r.name,u); else showAuthErr(r.msg);
 }
 
-function showAuthErr(msg) {
+function showAuthErr(msg){
   const e=document.getElementById('authErr');
   e.textContent='❌ '+msg; e.classList.add('show');
   setTimeout(()=>e.classList.remove('show'),3500);
 }
 
-async function doLogout() {
-  await post('/logout',{}); location.reload();
-}
+async function doLogout(){await post('/logout',{});location.reload();}
 
-function enterApp(name, user) {
+function enterApp(name,user){
   document.getElementById('authScreen').style.display='none';
   document.getElementById('app').style.display='block';
   document.getElementById('sbName').textContent=name;
@@ -412,28 +495,30 @@ function enterApp(name, user) {
   loadAccounts();
 }
 
-// ── NAV ───────────────────────────────────────────────────────────────────────
-function navTo(p) {
+function navTo(p){
   curPage=p;
   document.querySelectorAll('[id^="page-"]').forEach(x=>x.style.display='none');
-  document.querySelectorAll('.sb-btn').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.sb-btn,.bnav-btn').forEach(x=>x.classList.remove('active'));
   document.getElementById('page-'+p).style.display='block';
-  document.getElementById('nav-'+p).classList.add('active');
+  document.getElementById('nav-'+p)?.classList.add('active');
+  document.getElementById('bnav-'+p)?.classList.add('active');
   renderPage(p);
+  // Close sidebar on mobile
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('overlay').classList.remove('show');
 }
 
-// ── DATA ──────────────────────────────────────────────────────────────────────
-async function loadAccounts() {
+async function loadAccounts(){
   const d=await fetch('/get_accounts').then(r=>r.json());
-  if (!d.ok) return;
+  if(!d.ok) return;
   allAcc=d.accounts;
   updateStats();
   renderPage(curPage);
 }
 
-function updateStats() {
-  const t=allAcc.length, ac=allAcc.filter(a=>a.status==='active').length;
-  const tf=allAcc.filter(a=>a.has_2fa).length, bk=allAcc.filter(a=>a.backup_codes_count>0).length;
+function updateStats(){
+  const t=allAcc.length,ac=allAcc.filter(a=>a.status==='active').length;
+  const tf=allAcc.filter(a=>a.has_2fa).length,bk=allAcc.filter(a=>a.backup_codes_count>0).length;
   document.getElementById('sT').textContent=t;
   document.getElementById('sAc').textContent=ac;
   document.getElementById('s2F').textContent=tf;
@@ -448,19 +533,19 @@ function updateStats() {
   document.getElementById('subAll').textContent=`${t} accounts — ${ac} active, ${tf} with 2FA`;
 }
 
-function renderPage(p) {
-  if (p==='all') renderAccounts();
-  else if (['gmail','facebook','instagram','other'].includes(p)) renderFiltered(p);
+function renderPage(p){
+  if(p==='all') renderAccounts();
+  else if(['gmail','facebook','instagram','other'].includes(p)) renderFiltered(p);
 }
 
-function renderAccounts() {
+function renderAccounts(){
   const q=(document.getElementById('sInp')?.value||'').toLowerCase();
   let list=allAcc;
-  if (q) list=list.filter(a=>(a.email+a.label+a.platform+a.phone).toLowerCase().includes(q));
+  if(q) list=list.filter(a=>(a.email+a.label+a.platform+a.phone).toLowerCase().includes(q));
   renderGrid('aGrid',list);
 }
 
-function renderFiltered(plat) {
+function renderFiltered(plat){
   const list=plat==='other'
     ?allAcc.filter(a=>!['gmail','facebook','instagram'].includes((a.platform||'').toLowerCase()))
     :allAcc.filter(a=>(a.platform||'').toLowerCase()===plat);
@@ -469,26 +554,29 @@ function renderFiltered(plat) {
 
 const pIco={gmail:'📧',facebook:'📘',instagram:'📸',twitter:'🐦',other:'🌐'};
 
-function renderGrid(gid, list) {
+function renderGrid(gid,list){
   const g=document.getElementById(gid);
-  if (!g) return;
-  if (!list.length){g.innerHTML=`<div class="empty"><div class="eic">🔍</div><div class="etit">Koi account nahi</div><div class="esub">➕ Add Account se naya add karo</div></div>`;return;}
+  if(!g) return;
+  if(!list.length){g.innerHTML=`<div class="empty"><div class="eic">🔍</div><div class="etit">Koi account nahi</div><div class="esub">➕ se naya add karo</div></div>`;return;}
   g.innerHTML='';
   list.forEach(a=>g.appendChild(mkCard(a)));
 }
 
-function mkCard(a) {
+function mkCard(a){
   const p=(a.platform||'other').toLowerCase();
   const d=document.createElement('div');
   d.className='ac'; d.onclick=()=>openDetail(a.id);
   d.innerHTML=`
     <div class="ac-av ${p}">${pIco[p]||'🌐'}</div>
-    <div class="ac-info"><div class="ac-lbl">${a.label||a.email||'Unnamed'}</div><div class="ac-em">${a.email||a.phone||'—'}</div></div>
-    <div class="ac-bgs">
-      <span class="bdg ${a.status==='active'?'act':'inact'}">${a.status==='active'?'✅ Active':'⏸️ Inactive'}</span>
-      ${a.has_2fa?'<span class="bdg tfa">🛡️ 2FA</span>':''}
-      ${a.backup_codes_count>0?`<span class="bdg bk">🗝️ ${a.backup_codes_count}</span>`:''}
-      ${!a.has_pass?'<span class="bdg np">⚠️ No Pass</span>':''}
+    <div class="ac-info">
+      <div class="ac-lbl">${a.label||a.email||'Unnamed'}</div>
+      <div class="ac-em">${a.email||a.phone||'—'}</div>
+      <div class="ac-bgs">
+        <span class="bdg ${a.status==='active'?'act':'inact'}">${a.status==='active'?'✅ Active':'⏸️'}</span>
+        ${a.has_2fa?'<span class="bdg tfa">🛡️ 2FA</span>':''}
+        ${a.backup_codes_count>0?`<span class="bdg bk">🗝️ ${a.backup_codes_count}</span>`:''}
+        ${!a.has_pass?'<span class="bdg np">⚠️ No Pass</span>':''}
+      </div>
     </div>
     <div class="ac-acts" onclick="event.stopPropagation()">
       <button class="ibt" onclick="openEdit('${a.id}')">✏️</button>
@@ -497,8 +585,7 @@ function mkCard(a) {
   return d;
 }
 
-// ── ADD/EDIT ──────────────────────────────────────────────────────────────────
-function openAdd(p) {
+function openAdd(p){
   editId=null; bkCodes=[]; selPlatform=p||'Gmail'; selStatus='active';
   document.getElementById('mTitle').textContent='➕ Naya Account';
   ['fLbl','fEm','fPh','fPs','f2f','fNt','nBk'].forEach(id=>document.getElementById(id).value='');
@@ -507,12 +594,12 @@ function openAdd(p) {
   document.getElementById('addModal').classList.add('show');
 }
 
-async function openEdit(id) {
+async function openEdit(id){
   const d=await fetch(`/get_account/${id}`).then(r=>r.json());
-  if (!d.ok) return;
+  if(!d.ok) return;
   const a=d.account;
   editId=id; selPlatform=a.platform||'Gmail'; selStatus=a.status||'active'; bkCodes=a.backup_codes||[];
-  document.getElementById('mTitle').textContent='✏️ Account Edit Karo';
+  document.getElementById('mTitle').textContent='✏️ Edit Account';
   document.getElementById('fLbl').value=a.label||'';
   document.getElementById('fEm').value=a.email||'';
   document.getElementById('fPh').value=a.phone||'';
@@ -525,6 +612,7 @@ async function openEdit(id) {
 }
 
 function selPlat(p,el){selPlatform=p;document.querySelectorAll('.po').forEach(o=>o.classList.remove('sel'));el.classList.add('sel');}
+
 function setSt(s){
   selStatus=s;
   document.getElementById('stA').classList.toggle('act',s==='active');
@@ -532,27 +620,27 @@ function setSt(s){
   document.getElementById('stI').classList.toggle('act',s==='inactive');
   document.getElementById('stI').classList.toggle('r',s==='inactive');
 }
+
 function addBk(){const v=document.getElementById('nBk').value.trim();if(!v)return;bkCodes.push(v);document.getElementById('nBk').value='';renderBk();}
 function renderBk(){document.getElementById('bkList').innerHTML=bkCodes.map((c,i)=>`<div class="bi"><span class="bc">${c}</span><button class="bd" onclick="bkCodes.splice(${i},1);renderBk()">✕</button></div>`).join('');}
 
-async function saveAcc() {
+async function saveAcc(){
   const pl={label:document.getElementById('fLbl').value.trim(),email:document.getElementById('fEm').value.trim(),phone:document.getElementById('fPh').value.trim(),password:document.getElementById('fPs').value,platform:selPlatform,twofa_secret:document.getElementById('f2f').value.trim(),backup_codes:bkCodes,notes:document.getElementById('fNt').value.trim(),status:selStatus};
-  if (!pl.email&&!pl.phone){showToast('❌ Email ya phone zaroor do!','error');return;}
+  if(!pl.email&&!pl.phone){showToast('❌ Email ya phone zaroor do!','error');return;}
   const r=editId?await post(`/update_account/${editId}`,pl):await post('/add_account',pl);
-  if (r.ok){closeM('addModal');showToast(editId?'✅ Updated!':'✅ Saved!','success');loadAccounts();}
+  if(r.ok){closeM('addModal');showToast(editId?'✅ Updated!':'✅ Saved!','success');loadAccounts();}
   else showToast('❌ '+r.msg,'error');
 }
 
 async function delAcc(id){
-  if (!confirm('Delete karna chahte ho?')) return;
+  if(!confirm('Delete karna chahte ho?')) return;
   const r=await post(`/delete_account/${id}`,{});
-  if (r.ok){showToast('🗑️ Deleted!','info');loadAccounts();}
+  if(r.ok){showToast('🗑️ Deleted!','info');loadAccounts();}
 }
 
-// ── DETAIL ────────────────────────────────────────────────────────────────────
-async function openDetail(id) {
+async function openDetail(id){
   const d=await fetch(`/get_account/${id}`).then(r=>r.json());
-  if (!d.ok) return;
+  if(!d.ok) return;
   const a=d.account;
   document.getElementById('dtT').textContent=a.label||a.email||'Account';
   document.getElementById('dtS').textContent=`${a.platform} • ${a.added}`;
@@ -569,14 +657,14 @@ async function openDetail(id) {
       <div class="di" style="background:${bg}">${ic}</div>
       <div style="flex:1;min-width:0;"><div class="dl2">${lbl}</div><div class="dv" id="dv_${lbl}">${val}</div></div>
       <div class="da">
-        ${raw?`<button class="ibt" onclick="cp('${raw}')">📋</button>`:''}
-        ${rev?`<button class="ibt" onclick="toggleRev('dv_${lbl}','${raw}')">👁️</button>`:''}
+        ${raw?`<button class="ibt" onclick="cp('${raw.replace(/'/g,"\\'")}')">📋</button>`:''}
+        ${rev?`<button class="ibt" onclick="toggleRev('dv_${lbl}','${rev.replace(/'/g,"\\'")}')">👁️</button>`:''}
       </div>
     </div>`).join('');
-  if (a.backup_codes?.length){
-    html+=`<div class="dr" style="flex-direction:column;align-items:flex-start;gap:7px;">
+  if(a.backup_codes?.length){
+    html+=`<div class="dr" style="flex-direction:column;align-items:flex-start;gap:8px;">
       <div class="dl2">🗝️ Backup Codes (${a.backup_codes.length})</div>
-      <div style="display:flex;flex-wrap:wrap;gap:5px;">${a.backup_codes.map(c=>`<span style="background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.25);color:var(--ay);padding:3px 9px;border-radius:7px;font-family:'JetBrains Mono',monospace;font-size:11px;cursor:pointer;" onclick="cp('${c}')">${c}</span>`).join('')}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;">${a.backup_codes.map(c=>`<span style="background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.25);color:var(--ay);padding:4px 10px;border-radius:7px;font-family:'JetBrains Mono',monospace;font-size:12px;cursor:pointer;" onclick="cp('${c}')">${c}</span>`).join('')}</div>
     </div>`;
   }
   document.getElementById('dtB').innerHTML=html;
@@ -585,16 +673,14 @@ async function openDetail(id) {
 
 function toggleRev(id,v){const e=document.getElementById(id);e.textContent=e.textContent==='••••••••'?v:'••••••••';}
 
-// ── SETTINGS ──────────────────────────────────────────────────────────────────
 async function changePass(){
-  const o=document.getElementById('oldP').value, n=document.getElementById('newP').value;
-  if (!o||!n){showToast('❌ Dono fields bharo!','error');return;}
+  const o=document.getElementById('oldP').value,n=document.getElementById('newP').value;
+  if(!o||!n){showToast('❌ Dono fields bharo!','error');return;}
   const r=await post('/change_password',{old_password:o,new_password:n});
-  if (r.ok){showToast('✅ Password change ho gaya!','success');document.getElementById('oldP').value='';document.getElementById('newP').value='';}
+  if(r.ok){showToast('✅ Password change ho gaya!','success');document.getElementById('oldP').value='';document.getElementById('newP').value='';}
   else showToast('❌ '+r.msg,'error');
 }
 
-// ── HELPERS ───────────────────────────────────────────────────────────────────
 function toggleVis(id,btn){const e=document.getElementById(id);const s=e.type==='password';e.type=s?'text':'password';btn.textContent=s?'🙈':'👁️';}
 function closeM(id){document.getElementById(id).classList.remove('show');}
 function cp(t){navigator.clipboard.writeText(t);showToast('📋 Copied!','info');}
